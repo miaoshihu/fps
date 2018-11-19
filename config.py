@@ -2,18 +2,18 @@
 
 
 options = {
-    "port": 8077,
+    "port": 8066,
 }
 
 mysql = {
     # "host": "192.168.0.101",
     "host": "127.0.0.1",
     "user": "root",
-    "passwd": "xxxxx",
+    "passwd": "1xinyiyi",
     "dbName": "tv2bms",
     # "port": "3306"
 }
 
 settings = {
-    "debug": True,
+    "debug": False,
 }
