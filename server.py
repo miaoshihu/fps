@@ -5,12 +5,15 @@ import os
 from application import Application
 from config import options
 from tornado.httpserver import HTTPServer
-from index import WechatLoginHandler, IndexHandler, UploadHandler
+from index import WechatLoginHandler, IndexHandler, UploadHandler, GoodGetListHandler
+from api.good import GoodSubmit
 
 app = tornado.web.Application([
     (r'/fps/wechat_login', WechatLoginHandler),
     (r'/fps/index', IndexHandler),
     (r'/upload', UploadHandler),
+    (r'/fps/good/submit', GoodSubmit),
+    (r'/fps/good/getlist', GoodGetListHandler),
 ])
 
 if __name__ == "__main__":

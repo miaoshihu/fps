@@ -10,7 +10,7 @@ mysql = {
     "host": "127.0.0.1",
     "user": "root",
     "passwd": "1xinyiyi",
-    "dbName": "tv2bms",
+    "dbName": "fpms",
     # "port": "3306"
 }
 
