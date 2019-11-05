@@ -22,3 +22,8 @@ curl -o https://xxxx.top/upload -X POST -F "file=@/Users/ouyukibei/Desktop/aa.jp
 curl -v https://xxxx.top/upload -X POST -F "file=@/Users/ouyukibei/Desktop/aa.jpeg"
 
 scp /Users/ouyukibei/Documents/fighter/fps/index.py admin@ip:/home/admin/fps/fps/
+
+
+https://xxx.top/fps/index
+
+http://localhost:8066/fps/index
