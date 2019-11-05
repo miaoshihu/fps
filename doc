@@ -1,2 +1,24 @@
 python3 server.py
 
+
+/usr/local/nginx/
+
+/usr/local/nginx/sbin/nginx
+
+/usr/local/nginx/sbin/nginx -s reload
+
+/usr/local/nginx/sbin/nginx -s stop
+
+/usr/local/nginx/conf/nginx.conf
+
+
+
+python /home/admin/fps/fps/server.py
+
+
+
+curl -o https://xxxx.top/upload -X POST -F "file=@/Users/ouyukibei/Desktop/aa.jpeg"
+
+curl -v https://xxxx.top/upload -X POST -F "file=@/Users/ouyukibei/Desktop/aa.jpeg"
+
+scp /Users/ouyukibei/Documents/fighter/fps/index.py admin@ip:/home/admin/fps/fps/
