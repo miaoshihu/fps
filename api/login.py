@@ -3,6 +3,7 @@ import tornado.web
 import tornado.gen
 import logging
 from tornado import gen
+from tornado.httpclient import AsyncHTTPClient
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -17,10 +18,10 @@ class LoginHandler(tornado.web.RequestHandler):
     def get(self):
         self._future = None
         print('LoginHandler *******************get*0***')
-        # self._handle_request()
-        self.write(u"yes")
-        print('LoginHandler *******************get*1***')
-        self.finish()
+        self._handle_request()
+        # self.write(u"yes")
+        # print('LoginHandler *******************get*1***')
+        # self.finish()
 
     def post(self):
         self._future = None
@@ -35,17 +36,24 @@ class LoginHandler(tornado.web.RequestHandler):
         print("33333333")
         app_secret = self.get_query_argument('app_secret', True)
 
+        print("44444444")
         print('LoginHandler _handle_request code = ', code, app_id, app_secret)
 
-        # requestString = 'https://api.weixin.qq.com/sns/jscode2session?appid={APPID}&secret={SECRET}&js_code={JSCODE}&grant_type=authorization_code'.format(
-        #     APPID=app_id, SECRET=app_secret, JSCODE=code)
-        #
-        # print('request url ', requestString)
-        # http_client = AsyncHTTPClient()
-        # response = yield http_client.fetch(requestString, method='GET')
-        # print("respose ", response.body)
-        # raise gen.Return(str(response))
+        requestString = 'https://api.weixin.qq.com/sns/jscode2session?appid={APPID}&secret={SECRET}&js_code={JSCODE}&grant_type=authorization_code'.format(
+            APPID=app_id, SECRET=app_secret, JSCODE=code)
 
+        print("5555555")
+        print('request url ', requestString)
+        http_client = AsyncHTTPClient()
+        print("6666666")
+        response = yield http_client.fetch(requestString, method='GET')
+        print("7777777")
+        print("respose ", response.body)
+
+
+        raise gen.Return(str(response))
+
+        print("88888888")
         self.write("jiayou")
         self.finish()
 
