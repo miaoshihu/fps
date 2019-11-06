@@ -9,17 +9,17 @@ logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('app')
 
 
-class WechatLoginHandler(tornado.web.RequestHandler):
+class LoginHandler(tornado.web.RequestHandler):
 
     def set_default_headers(self):
         self.set_header('Content-type', 'application/json')
 
     def get(self):
         self._future = None
-        print('WechatLoginHandler *******************get*0***')
+        print('LoginHandler *******************get*0***')
         # self._handle_request()
         self.write(u"yes")
-        print('WechatLoginHandler *******************get*1***')
+        print('LoginHandler *******************get*1***')
         self.finish()
 
     def post(self):
@@ -35,7 +35,7 @@ class WechatLoginHandler(tornado.web.RequestHandler):
         print("33333333")
         app_secret = self.get_query_argument('app_secret', True)
 
-        print('WechatLoginHandler _handle_request code = ', code, app_id, app_secret)
+        print('LoginHandler _handle_request code = ', code, app_id, app_secret)
 
         # requestString = 'https://api.weixin.qq.com/sns/jscode2session?appid={APPID}&secret={SECRET}&js_code={JSCODE}&grant_type=authorization_code'.format(
         #     APPID=app_id, SECRET=app_secret, JSCODE=code)
