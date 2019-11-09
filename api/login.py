@@ -3,6 +3,7 @@ import tornado.web
 import tornado.gen
 import logging
 from tornado import gen
+from tornado import web
 from tornado.httpclient import AsyncHTTPClient
 from tornado.httpclient import HTTPClient
 
@@ -16,21 +17,27 @@ class LoginHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header('Content-type', 'application/json')
 
-    def get(self):
-        self._future = None
-        print('LoginHandler *******************get*0***')
-        self._handle_request()
-        # self.write(u"yes")
-        # print('LoginHandler *******************get*1***')
-        # self.finish()
+    # def get(self):
+    #     self._future = None
+    #     print('LoginHandler *******************get*ccccc***')
+    #     self._handle_request()
+    #     # self.write(u"yes")
+    #     # print('LoginHandler *******************get*1***')
+    #     # self.finish()
 
     def post(self):
         self._future = None
-        self._handle_request()
+        # self._handle_request()
+        print("post method")
 
+    # @gen.coroutine
+    # async def _handle_request(self):
+    # @tornado.gen.coroutine
     @gen.coroutine
-    def _handle_request(self):
-        print("11111111vv")
+    def get(self):
+        print("get method")
+        # self._future = None
+        print("11111111ooooooooooaabb")
         code = self.get_argument('code')
         print("22222222a")
         app_id = self.get_argument('app_id')
@@ -45,21 +52,19 @@ class LoginHandler(tornado.web.RequestHandler):
 
         print("5555555")
         print(requestString)
-        # http_client = AsyncHTTPClient()
-        http_client = HTTPClient()
-
-        print("66666666")
-
-        response = http_client.fetch(requestString)
+        http_client = AsyncHTTPClient()
+        # # http_client = HTTPClient()
+        #
+        # print("66666666a")
+        #
+        response = yield http_client.fetch(requestString)
         print("77777777")
-        print("after fetch----------")
-        self.write(str(response.body))
+        # print("after fetch----------")
+        # self.write(str(response.body))
 
-        print("8888888")
+        # print("8888888")
 
         # print("6666666")
-        # http_client.fetch(requestString, self.on_response)
-
 
         # response = yield tornado.gen.Task(http_client.fetch, requestString)
         # print(str(response.body))
@@ -72,11 +77,12 @@ class LoginHandler(tornado.web.RequestHandler):
         # print("respose ", response.body)
         #
         #
-        # # raise gen.Return(str(response))
+        # raise gen.Return(str(response))
         #
-        # print("88888888")
+        print("88888888b")
         # self.write(response.body)
-        # self.finish()
+        self.write(str(response.body))
+        self.finish()
 
     @tornado.gen.coroutine
     def on_response(self, response):
