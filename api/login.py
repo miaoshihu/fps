@@ -34,5 +34,5 @@ class LoginHandler(tornado.web.RequestHandler):
         print(requestString)
         http_client = AsyncHTTPClient()
         response = yield http_client.fetch(requestString)
-        self.write(str(response.body))
+        self.write(response.body.decode('utf-8'))
         self.finish()
