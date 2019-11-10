@@ -87,22 +87,31 @@ class GoodSubmit(tornado.web.RequestHandler):
         return request_info
 
     def get_good_info(self):
-        name = self.get_query_argument('name', None)
-        image1 = self.get_query_argument('image1', None)
-        image2 = self.get_query_argument('image2', None)
-        image3 = self.get_query_argument('image3', None)
+        name = self.get_argument('name', None)
+        image1 = self.get_argument('image1', None)
+        image2 = self.get_argument('image2', None)
+        image3 = self.get_argument('image3', None)
 
         status = 1
-        price = self.get_query_argument('price', None)
-        short_desc = self.get_query_argument('short_desc', None)
-        desc = self.get_query_argument('desc', None)
-        address = self.get_query_argument('address', None)
-        phone = self.get_query_argument('phone', None)
+        price = self.get_argument('price', None)
+        short_desc = self.get_argument('short_desc', None)
+        desc = self.get_argument('desc', None)
+        address = self.get_argument('address', None)
+        phone = self.get_argument('phone', None)
         view_times = 0
         create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         last_modify_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        city_id = self.get_query_argument('city_id', None)
-        user_id = self.get_query_argument('user_id', None)
+        city_id = self.get_argument('city_id', None)
+        user_id = self.get_argument('user_id', None)
+
+        self.logs(name)
+        self.logs(price)
+        self.logs(short_desc)
+        self.logs(desc)
+        self.logs(address)
+        self.logs(phone)
+
+        # self.logs(name + " " + price + " " + short_desc + " " + desc + " " + address + " " + phone + " ")
 
         if not (name and image1 and image2 and price and short_desc and desc and phone and city_id and user_id):
             return None
@@ -111,7 +120,7 @@ class GoodSubmit(tornado.web.RequestHandler):
                     create_time, last_modify_time, city_id, user_id)
 
     def get_user_info(self):
-        id = self.get_query_argument("user_id", None)
+        id = self.get_argument("user_id", None)
         user = User(id)
         return user
 
