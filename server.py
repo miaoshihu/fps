@@ -2,7 +2,6 @@
 
 import tornado.ioloop
 import os
-from application import Application
 from config import options
 from tornado.httpserver import HTTPServer
 from index import IndexHandler, UploadHandler, GoodGetListHandler
