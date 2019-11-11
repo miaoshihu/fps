@@ -27,20 +27,22 @@ class UploadHandler(tornado.web.RequestHandler):
         self._handle_request()
 
     def _handle_request(self):
-        code = self.get_query_argument('code', True)
+        code = self.get_argument('code', True)
 
         print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ upload 2")
         # str = "good man"
 
         # self.request
-        file_name = self.get_body_argument('file_name', 'null')
-        file_md5 = self.get_body_argument('file_md5', True)
-        file_path = self.get_body_argument('file_path', True)
-        file_content_type = self.get_body_argument('file_content_type', True)
-        file_size = self.get_body_argument('file_size', True)
+        file_name = self.get_argument('file_name', 'null')
+        file_md5 = self.get_argument('file_md5', True)
+        file_path = self.get_argument('file_path', True)
+        file_content_type = self.get_argument('file_content_type', True)
+        file_size = self.get_argument('file_size', True)
+
+        os.rename(file_path, file_path + ".jpg")
 
         content = json.dumps({
-            'name': file_name,
+            'name': file_name + ".jpg",
             'content_type': file_content_type,
             'md5': file_md5,
             'path': file_path,
@@ -51,6 +53,8 @@ class UploadHandler(tornado.web.RequestHandler):
             # 'body_arguments': str(self.request.body_arguments),
             # 'files': str(self.request.files),
         })
+
+        print("%%%%%%%%%%%%%%%%%%%%%haha, upload done: ", json.dumps(content))
 
         self.write(content)
         self.finish()
@@ -76,12 +80,12 @@ class GoodSubmitHandler(tornado.web.RequestHandler):
         print(result)
 
         # self.request
-        userid = self.get_query_argument('userid', 'null')
-        name = self.get_query_argument('name', True)
-        image1 = self.get_query_argument('image1', True)
-        image2 = self.get_query_argument('image2', True)
-        image3 = self.get_query_argument('image3', True)
-        type = self.get_query_argument('type', 0)
+        userid = self.get_argument('userid', 'null')
+        name = self.get_argument('name', True)
+        image1 = self.get_argument('image1', True)
+        image2 = self.get_argument('image2', True)
+        image3 = self.get_argument('image3', True)
+        type = self.get_argument('type', 0)
 
         userid = 1
         name = '苹果手机'
@@ -91,11 +95,11 @@ class GoodSubmitHandler(tornado.web.RequestHandler):
         type = 0
 
         status = 1  # 待审核
-        price = self.get_query_argument('price', 0)
+        price = self.get_argument('price', 0)
 
-        short_desc = self.get_query_argument('short_desc', '')
-        desc = self.get_query_argument('short_desc', '')
-        view_times = self.get_query_argument('view_times', 0) + 1
+        short_desc = self.get_argument('short_desc', '')
+        desc = self.get_argument('short_desc', '')
+        view_times = self.get_argument('view_times', 0) + 1
 
         price = 10
         short_desc = '苹果货就是牛逼'
@@ -151,12 +155,12 @@ class GoodGetListHandler(tornado.web.RequestHandler):
         print(result)
 
         # self.request
-        userid = self.get_query_argument('userid', 'null')
-        name = self.get_query_argument('name', True)
-        image1 = self.get_query_argument('image1', True)
-        image2 = self.get_query_argument('image2', True)
-        image3 = self.get_query_argument('image3', True)
-        type = self.get_query_argument('type', 0)
+        userid = self.get_argument('userid', 'null')
+        name = self.get_argument('name', True)
+        image1 = self.get_argument('image1', True)
+        image2 = self.get_argument('image2', True)
+        image3 = self.get_argument('image3', True)
+        type = self.get_argument('type', 0)
 
         userid = 1
         name = '苹果手机'
@@ -166,11 +170,11 @@ class GoodGetListHandler(tornado.web.RequestHandler):
         type = 0
 
         status = 1  # 待审核
-        price = self.get_query_argument('price', 0)
+        price = self.get_argument('price', 0)
 
-        short_desc = self.get_query_argument('short_desc', '')
-        desc = self.get_query_argument('short_desc', '')
-        view_times = self.get_query_argument('view_times', 0) + 1
+        short_desc = self.get_argument('short_desc', '')
+        desc = self.get_argument('short_desc', '')
+        view_times = self.get_argument('view_times', 0) + 1
 
         price = 10
         short_desc = '苹果货就是牛逼'
