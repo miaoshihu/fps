@@ -109,6 +109,9 @@ http {
         client_max_body_size      20m;
         client_body_buffer_size  512k;
 
+        location /static/ {
+            root /home/admin/fps/;
+        }
 
         location / {
             #root   html;
@@ -137,8 +140,8 @@ http {
                 upload_cleanup 400 404 499 500-505;
                 upload_pass_args on;  
         }
-        #location @python {
-        #       proxy_pass http://frontends;
-        #}
+        location @python {
+                proxy_pass http://frontends;
+        }
     }
 }
