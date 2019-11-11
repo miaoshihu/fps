@@ -4,9 +4,10 @@ import tornado.ioloop
 import os
 from config import options
 from tornado.httpserver import HTTPServer
-from index import UploadHandler, GoodGetListHandler
+from index import GoodGetListHandler
 from api.good import GoodSubmit
 from api.login import LoginHandler
+from api.upload import UploadHandler
 
 app = tornado.web.Application([
     (r'/fps/login', LoginHandler),
