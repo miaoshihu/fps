@@ -20,16 +20,16 @@ class UploadHandler(tornado.web.RequestHandler):
         self.set_header('Content-type', 'text/html')
 
     def get(self):
-        print('IndexHandler *******************get****')
+        print('UploadHandler get')
         self._handle_request()
 
     def post(self):
+        print('UploadHandler post')
         self._handle_request()
 
     def _handle_request(self):
-        code = self.get_argument('code', True)
 
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ upload 2")
+        print("_handle_request")
         # str = "good man"
 
         # self.request
@@ -38,6 +38,8 @@ class UploadHandler(tornado.web.RequestHandler):
         file_path = self.get_argument('file_path', True)
         file_content_type = self.get_argument('file_content_type', True)
         file_size = self.get_argument('file_size', True)
+
+        my_name = self.get_argument('myname', True)
 
         os.rename(file_path, file_path + ".jpg")
 
@@ -53,6 +55,8 @@ class UploadHandler(tornado.web.RequestHandler):
             # 'body_arguments': str(self.request.body_arguments),
             # 'files': str(self.request.files),
         })
+
+        print("_handle_request", "my_name", my_name)
 
         print("%%%%%%%%%%%%%%%%%%%%%haha, upload done: ", json.dumps(content))
 
