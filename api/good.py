@@ -4,8 +4,10 @@ import tornado.gen
 import logging
 import json
 import time
+from utils.status_code import Code
 from mysql_helper import MysqlHelper
 from bean.data import Good, Need, City, User, GoodSubmitRequest
+from utils.response import json_error
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -49,8 +51,8 @@ class GoodSubmit(tornado.web.RequestHandler):
         # step2: 参数不合法，返回错误
         if not request_info:
             self.logs("response_error_para error!")
-            # result = self.response_error_para()
-            self.write("error para")
+            result = json_error(Code.ERROR_PARA, Code.ERROR_PARA_DESC)
+            self.write(result)
             self.finish()
             return
 

@@ -97,7 +97,7 @@ class City:
         self.id = id
 
     def __str__(self):
-        return "(city_id = %s" %self.id + ")"
+        return "(city_id = %s" % self.id + ")"
 
 
 class User:
