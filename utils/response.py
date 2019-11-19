@@ -10,7 +10,6 @@ import json
 
 
 def json_error(code, error_text):
-    print("json_error called")
     content = json.dumps({
         'code': code,
         'desc': error_text,

@@ -6,7 +6,7 @@ import json
 import time
 from utils.status_code import Code
 from mysql_helper import MysqlHelper
-from bean.data import Good, Need, City, User, GoodSubmitRequest
+from bean.data import Good, Need, City, GoodSubmitRequest
 from utils.response import json_error
 
 logging.basicConfig(level=logging.DEBUG)
@@ -45,22 +45,18 @@ class GoodSubmit(tornado.web.RequestHandler):
         dbHelper = MysqlHelper()
 
         # step1: 获取参数值
-        request_info = self.get_request_info()
-        self.logs("request_info =  " + request_info.__str__())
+        good_info = self.get_good_info()
 
         # step2: 参数不合法，返回错误
-        if not request_info:
+        if not good_info:
             self.logs("response_error_para error!")
             result = json_error(Code.ERROR_PARA, Code.ERROR_PARA_DESC)
             self.write(result)
             self.finish()
             return
 
-        # step3: 检查是否已有此用户
-        has_user = self.is_user_exit(request_info, dbHelper)
-
-        # step4: 储存用户到数据库
-        result = self.insert_user_and_good(request_info, has_user)
+        # step3: 储存用户到数据库
+        result = self.insert_good(dbHelper, good_info)
 
         if not result:
             self.write("error")
@@ -70,23 +66,41 @@ class GoodSubmit(tornado.web.RequestHandler):
         self.write("finish")
         self.finish()
 
-    def insert_user_and_good(self, request_info, has_user):
-        pass
+    def insert_good(self, dbHelper, info):
+        """
+            +------------------+------------------+------+-----+---------+----------------+
+            | Field            | Type             | Null | Key | Default | Extra          |
+            +------------------+------------------+------+-----+---------+----------------+
+            | id               | int(11)          | NO   | PRI | NULL    | auto_increment |
+            | user_id          | varchar(50)      | NO   |     | NULL    |                |
+            | user_nickname    | varchar(20)      | YES  |     | NULL    |                |
+            | name             | varchar(10)      | NO   |     | NULL    |                |
+            | image1           | varchar(200)     | YES  |     | NULL    |                |
+            | image2           | varchar(200)     | YES  |     | NULL    |                |
+            | image3           | varchar(200)     | YES  |     | NULL    |                |
+            | status           | int(11)          | NO   |     | NULL    |                |
+            | price            | int(10) unsigned | NO   |     | NULL    |                |
+            | short_desc       | varchar(20)      | YES  |     | NULL    |                |
+            | descs            | longtext         | YES  |     | NULL    |                |
+            | address          | varchar(20)      | YES  |     | NULL    |                |
+            | phone            | int(10) unsigned | NO   |     | NULL    |                |
+            | view_times       | int(10) unsigned | NO   |     | NULL    |                |
+            | create_time      | datetime(6)      | YES  |     | NULL    |                |
+            | last_modify_time | datetime(6)      | YES  |     | NULL    |                |
+            | city_id          | varchar(20)      | NO   | MUL | NULL    |                |
+            +------------------+------------------+------+-----+---------+----------------+
+            17 rows in set (0.03 sec)
+        """
 
-    def is_user_exit(self, request_info, dbHelper):
-        user = request_info.user
-        result = dbHelper.get_all("select * from msapp_user where id = %s" % user.id)
-        self.logs("result = {} " % result)
+        sql = "insert into msapp_good(" \
+              "user_id,user_nickname, name,status,price,short_desc,descs,address,phone,city_id) values " \
+              "('{}','{}','{}',{},{},'{}','{}','{}','{}','{}')".\
+            format(info.user_id, info.user_nickname,info.name, 1, info.price, info.short_desc, info.descs, info.address, info.phone, "hb_xianghe")
+        self.logs("------------------")
+        self.logs(sql)
 
-    def get_request_info(self):
-        good = self.get_good_info()
-        user = self.get_user_info()
-        if not good:
-            return None
-        if not user:
-            return None
-        request_info = GoodSubmitRequest(good, user)
-        return request_info
+        result2 = dbHelper.insert(sql)
+        return result2
 
     def get_good_info(self):
         name = self.get_argument('name', None)
@@ -97,7 +111,7 @@ class GoodSubmit(tornado.web.RequestHandler):
         status = 1
         price = self.get_argument('price', None)
         short_desc = self.get_argument('short_desc', None)
-        desc = self.get_argument('desc', None)
+        descs = self.get_argument('desc', None)
         address = self.get_argument('address', None)
         phone = self.get_argument('phone', None)
         view_times = 0
@@ -105,26 +119,27 @@ class GoodSubmit(tornado.web.RequestHandler):
         last_modify_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         city_id = self.get_argument('city_id', None)
         user_id = self.get_argument('user_id', None)
+        user_nickname = self.get_argument('user_nickname', None)
+        user_id = "123456a"
+        user_nickname = "勇敢的心"
 
         self.logs(name)
         self.logs(price)
         self.logs(short_desc)
-        self.logs(desc)
+        self.logs(descs)
         self.logs(address)
         self.logs(phone)
+        self.logs(create_time)
+        self.logs(city_id)
+        self.logs(user_id)
 
         # self.logs(name + " " + price + " " + short_desc + " " + desc + " " + address + " " + phone + " ")
 
-        if not (name and image1 and image2 and price and short_desc and desc and phone and city_id and user_id):
-            return None
+        # if not (name and image1 and image2 and price and short_desc and desc and phone and city_id and user_id):
+        #     return None
 
-        return Good(name, image1, image2, image3, status, price, short_desc, desc, address, phone, view_times,
-                    create_time, last_modify_time, city_id, user_id)
-
-    def get_user_info(self):
-        id = self.get_argument("user_id", None)
-        user = User(id)
-        return user
+        return Good(name, image1, image2, image3, status, price, short_desc, descs, address, phone, view_times,
+                    create_time, last_modify_time, city_id, user_id, user_nickname)
 
 
 class GoodGetList(tornado.web.RequestHandler):
