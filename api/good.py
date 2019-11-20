@@ -8,6 +8,7 @@ from utils.status_code import Code
 from mysql_helper import MysqlHelper
 from bean.data import Good, Need, City, GoodSubmitRequest
 from utils.response import json_error
+from utils.response import json_success
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -59,11 +60,13 @@ class GoodSubmit(tornado.web.RequestHandler):
         result = self.insert_good(dbHelper, good_info)
 
         if not result:
-            self.write("error")
+            result = json_error(Code.ERROR_GODD_INSERT, Code.ERROR_PARA_DESC)
+            self.write(result)
             self.finish()
             return
 
-        self.write("finish")
+        result = json_success("success");
+        self.write(result)
         self.finish()
 
     def insert_good(self, dbHelper, info):
@@ -120,8 +123,6 @@ class GoodSubmit(tornado.web.RequestHandler):
         city_id = self.get_argument('city_id', None)
         user_id = self.get_argument('user_id', None)
         user_nickname = self.get_argument('user_nickname', None)
-        user_id = "123456a"
-        user_nickname = "勇敢的心"
 
         self.logs(name)
         self.logs(price)

@@ -16,3 +16,12 @@ def json_error(code, error_text):
     })
 
     return content
+
+
+def json_success(text):
+    content = json.dumps({
+        'code': 0,
+        'desc': text,
+    })
+
+    return content
