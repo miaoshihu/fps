@@ -4,8 +4,8 @@ import tornado.ioloop
 import os
 from config import options
 from tornado.httpserver import HTTPServer
-from index import GoodGetListHandler
 from api.good import GoodSubmit
+from api.good import GoodGetList
 from api.login import LoginHandler
 from api.upload import UploadHandler
 
@@ -13,7 +13,7 @@ app = tornado.web.Application([
     (r'/fps/login', LoginHandler),
     (r'/upload', UploadHandler),
     (r'/fps/good/submit', GoodSubmit),
-    (r'/fps/good/getlist', GoodGetListHandler),
+    (r'/fps/good/getlist', GoodGetList),
 ])
 
 if __name__ == "__main__":
