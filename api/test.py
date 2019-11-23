@@ -21,7 +21,6 @@ log = logging.getLogger('app')
 
 class Test(tornado.web.RequestHandler):
 
-
     def set_default_headers(self):
         self.set_header('Content-type', 'application/json')
 

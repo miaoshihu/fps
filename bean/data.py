@@ -34,8 +34,8 @@ class Good:
         +------------------+------------------+------+-----+---------+----------------+
     '''
 
-    def __init__(self, name, image1, image2, image3, status, price, short_desc, descs, address, phone, view_times,
-                 create_time, last_modify_time, city_id, user_id, user_nickname):
+    def __init__(self, name, image1, image2, image3, status, price, short_desc, descs, address, phone,
+                 create_time, city_id, user_id, user_nickname):
         self.name = name
         self.image1 = image1
         self.image2 = image2
@@ -48,7 +48,6 @@ class Good:
         self.phone = phone
         self.view_times = 0
         self.create_time = create_time
-        self.last_modify_time = last_modify_time
         self.city_id = city_id
         self.user_id = user_id
         self.user_nickname = user_nickname
@@ -79,6 +78,20 @@ class Need:
         | user_id          | varchar(50)      | NO   | MUL | NULL    |                |
         +------------------+------------------+------+-----+---------+----------------+
     '''
+    def __init__(self, name, price, descs, address, phone,
+                 create_time, city_id, user_id, user_nickname):
+        self.name = name
+        self.price = price
+        self.descs = descs
+        self.address = address
+        self.phone = phone
+        self.create_time = create_time
+        self.city_id = city_id
+        self.user_id = user_id
+        self.user_nickname = user_nickname
+
+    def __str__(self):
+        return "(need = %s" % self.name + " , user = %s" % self.user_nickname + ")"
 
 
 class City:

@@ -117,9 +117,7 @@ class GoodSubmit(tornado.web.RequestHandler):
         descs = self.get_argument('desc', None)
         address = self.get_argument('address', None)
         phone = self.get_argument('phone', None)
-        view_times = 0
         create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        last_modify_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         city_id = self.get_argument('city_id', None)
         user_id = self.get_argument('user_id', None)
         user_nickname = self.get_argument('user_nickname', None)
@@ -139,8 +137,8 @@ class GoodSubmit(tornado.web.RequestHandler):
         # if not (name and image1 and image2 and price and short_desc and desc and phone and city_id and user_id):
         #     return None
 
-        return Good(name, image1, image2, image3, status, price, short_desc, descs, address, phone, view_times,
-                    create_time, last_modify_time, city_id, user_id, user_nickname)
+        return Good(name, image1, image2, image3, status, price, short_desc, descs, address, phone,
+                    create_time, city_id, user_id, user_nickname)
 
 
 class GoodGetList(tornado.web.RequestHandler):
