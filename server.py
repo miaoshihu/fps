@@ -8,12 +8,14 @@ from api.good import GoodSubmit
 from api.good import GoodGetList
 from api.login import LoginHandler
 from api.upload import UploadHandler
+from api.test import Test
 
 app = tornado.web.Application([
     (r'/fps/login', LoginHandler),
     (r'/upload', UploadHandler),
     (r'/fps/good/submit', GoodSubmit),
     (r'/fps/good/getlist', GoodGetList),
+    (r'/fps/test', Test),
 ])
 
 if __name__ == "__main__":
