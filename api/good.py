@@ -131,6 +131,9 @@ class GoodSubmit(tornado.web.RequestHandler):
         self.logs(create_time)
         self.logs(city_id)
         self.logs(user_id)
+        self.logs("-----------image1 and image2-")
+        self.logs(image1)
+        self.logs(image2)
 
         # self.logs(name + " " + price + " " + short_desc + " " + desc + " " + address + " " + phone + " ")
 
