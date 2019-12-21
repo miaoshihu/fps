@@ -6,6 +6,7 @@ from config import options
 from tornado.httpserver import HTTPServer
 from api.good import GoodSubmit
 from api.good import GoodGetList
+from api.good import GoodGet
 from api.need import NeedSubmit
 from api.login import LoginHandler
 from api.upload import UploadHandler
@@ -16,6 +17,7 @@ app = tornado.web.Application([
     (r'/upload', UploadHandler),
     (r'/fps/good/submit', GoodSubmit),
     (r'/fps/good/getlist', GoodGetList),
+    (r'/fps/good/get', GoodGet),
 
     (r'/fps/need/submit', NeedSubmit),
     (r'/fps/test', Test),
