@@ -4,9 +4,9 @@ import tornado.ioloop
 import os
 from config import options
 from tornado.httpserver import HTTPServer
-from api.good import GoodSubmit
-from api.good import GoodGetList
-from api.good import GoodGet
+from api.good.good_add import GoodSubmit
+from api.good.good_list import GoodGetList
+from api.good.good_get import GoodGet
 from api.need import NeedSubmit
 from api.login import LoginHandler
 from api.upload import UploadHandler
