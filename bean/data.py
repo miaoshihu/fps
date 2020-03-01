@@ -35,7 +35,7 @@ class Good:
     '''
 
     def __init__(self, name, image1, image2, image3, status, price, short_desc, descs, address, phone,
-                 create_time, city_id, user_id, user_nickname):
+                 create_time, city_id, user_id, user_nickname, author_id):
         self.name = name
         self.image1 = image1
         self.image2 = image2
@@ -51,6 +51,7 @@ class Good:
         self.city_id = city_id
         self.user_id = user_id
         self.user_nickname = user_nickname
+        self.author_id = author_id
 
     def __str__(self):
         return "(good = %s" % self.name + " , user = %s" % self.user_nickname + ")"
@@ -112,3 +113,34 @@ class City:
     def __str__(self):
         return "(city_id = %s" % self.id + ")"
 
+
+class Author:
+
+    '''
+        +-------------+-------------+------+-----+---------+-------+
+        | Field       | Type        | Null | Key | Default | Extra |
+        +-------------+-------------+------+-----+---------+-------+
+        | id          | varchar(50) | NO   | PRI | NULL    |       |
+        | nickname    | varchar(20) | NO   |     | NULL    |       |
+        | point       | int(11)     | NO   |     | NULL    |       |
+        | status      | int(11)     | NO   |     | NULL    |       |
+        | descs       | longtext    | YES  |     | NULL    |       |
+        | town        | varchar(20) | YES  |     | NULL    |       |
+        | address     | varchar(20) | YES  |     | NULL    |       |
+        | phone       | varchar(20) | NO   |     | NULL    |       |
+        | create_time | datetime(6) | YES  |     | NULL    |       |
+        | time_stamp  | bigint(20)  | YES  |     | NULL    |       |
+        +-------------+-------------+------+-----+---------+-------+
+    '''
+
+    def __init__(self, id, nickname, town, address, phone, create_time, time_stamp):
+        self.id = id
+        self.nickname = nickname
+        self.town = town
+        self.address = address
+        self.phone = phone
+        self.create_time = create_time
+        self.time_stamp = time_stamp
+
+    def __str__(self):
+        return "author %s" % self.nickname

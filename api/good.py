@@ -99,9 +99,9 @@ class GoodSubmit(tornado.web.RequestHandler):
         time_stamp = (int)(time.time())
 
         sql = "insert into msapp_good(" \
-              "user_id,user_nickname, name,status,price,short_desc,descs,address,phone,city_id,create_time,image1,image2,time_stamp) values " \
-              "('{}','{}','{}',{},{},'{}','{}','{}','{}','{}','{}','{}','{}',{})".\
-            format(info.user_id, info.user_nickname,info.name, 0, info.price, info.short_desc, info.descs, info.address, info.phone, "hebei.xianghe", datetime.datetime.now(), info.image1, info.image2, time_stamp)
+              "user_id,user_nickname, name,status,price,short_desc,descs,address,phone,city_id,create_time,image1,image2,time_stamp, author_id) values " \
+              "('{}','{}','{}',{},{},'{}','{}','{}','{}','{}','{}','{}','{}',{},'{}')".\
+            format(info.user_id, info.user_nickname,info.name, 0, info.price, info.short_desc, info.descs, info.address, info.phone, "hebei.xianghe", datetime.datetime.now(), info.image1, info.image2, time_stamp, info.author_id)
         self.logs("------------------")
         self.logs(sql)
 
@@ -117,7 +117,7 @@ class GoodSubmit(tornado.web.RequestHandler):
         status = 1
         price = self.get_argument('price', None)
         short_desc = self.get_argument('short_desc', None)
-        descs = self.get_argument('desc', None)
+        descs = self.get_argument('descs', None)
         address = self.get_argument('address', None)
         phone = self.get_argument('phone', None)
         create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
@@ -126,6 +126,7 @@ class GoodSubmit(tornado.web.RequestHandler):
         user_nickname = self.get_argument('user_nickname', None)
         image1 = self.get_argument('image1', None)
         image2 = self.get_argument('image2', None)
+        author_id = self.get_argument('user_id', None)
 
         self.logs(name)
         self.logs(price)
@@ -139,6 +140,7 @@ class GoodSubmit(tornado.web.RequestHandler):
         self.logs("-----------image1 and image2-")
         self.logs(image1)
         self.logs(image2)
+        self.logs(author_id)
 
         # self.logs(name + " " + price + " " + short_desc + " " + desc + " " + address + " " + phone + " ")
 
@@ -146,7 +148,7 @@ class GoodSubmit(tornado.web.RequestHandler):
         #     return None
 
         return Good(name, image1, image2, image3, status, price, short_desc, descs, address, phone,
-                    create_time, city_id, user_id, user_nickname)
+                    create_time, city_id, user_id, user_nickname, author_id)
 
 
 class GoodGetList(tornado.web.RequestHandler):
@@ -210,6 +212,7 @@ class GoodGetList(tornado.web.RequestHandler):
         for gid in cglist:
             # print(gid)
             good = r.hgetall(gid)
+            print("&&&&&&&&&&&", good, gid)
             item = {
                 'id': good.get(b'id').decode(),
                 'name': good.get(b'name').decode(),
@@ -219,6 +222,7 @@ class GoodGetList(tornado.web.RequestHandler):
                 'image2': good.get(b'image2').decode(),
                 'price': good.get(b'price').decode(),
                 'short_desc': good.get(b'short_desc').decode(),
+                'descs': good.get(b'descs').decode(),
                 'address': good.get(b'address').decode(),
                 'create_time': good.get(b'create_time').decode(),
                 'phone': good.get(b'phone').decode(),

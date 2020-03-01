@@ -14,7 +14,7 @@ class Code(object):
     ERROR_GODD_INSERT = -11
 
     ERROR_PARA_DESC = "error para"
-    ERROR_GODD_INSERT_DESC = "error good insert"
+    ERROR_GODD_INSERT_DESC = "error insert"
 
     def __init__(self):
         pass
