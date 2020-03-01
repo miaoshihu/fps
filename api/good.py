@@ -157,7 +157,6 @@ class GoodGetList(tornado.web.RequestHandler):
         self.set_header('Content-type', 'application/json')
 
     def get(self):
-        print('GoodGetList *******************get****')
         self._handle_request()
 
     def post(self):
@@ -165,16 +164,9 @@ class GoodGetList(tornado.web.RequestHandler):
 
     def _handle_request(self):
         page = int(self.get_argument('page', "1")) - 1
+        
         print("GoodGetList ", page)
-        # step = 3
-        # startIndex = page * step
-        # dbHelper = MysqlHelper()
-        # mysql = "select * from msapp_good limit " + str(startIndex) + "," + str(step)
-        # print(mysql)
-        # result = dbHelper.get_all(mysql)
-        # print(result)
-        result = json_success("success good get list")
-        # self.write(result)
+
         listkey = "cgl_hb.xianghe"
 
         data = []
