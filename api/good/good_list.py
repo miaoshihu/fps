@@ -11,7 +11,7 @@ from bean.data import Good, Need, City, GoodSubmitRequest
 from utils.response import json_error
 from utils.response import json_success
 import datetime
-from api.utils.utils import getSig
+from api.utils.utils import check_args
 from utils.status_code import Code
 logging.basicConfig(level=logging.DEBUG)
 
@@ -32,7 +32,8 @@ class GoodGetList(tornado.web.RequestHandler):
     def _handle_request(self):
         page = int(self.get_argument('page', "1")) - 1
 
-        paraCheck = self.get_arg_check()
+        paraCheck = check_args(self)
+
         if not paraCheck:
             print("GoodGetList para check failed!")
             result = {
@@ -118,19 +119,3 @@ class GoodGetList(tornado.web.RequestHandler):
         self.write(result)
         self.finish()
 
-    def get_arg_check(self):
-        time_stamp = self.get_argument('time_stamp', "-1")
-        if time_stamp == -1:
-            print("good_list get_arg_check failed time_stamp valid!")
-            return False
-
-        sig = self.get_argument('sig', '-1')
-        if sig == -1:
-            print("good_list get_arg_check failed sig valid!")
-            return False
-
-        mysig = getSig(time_stamp)
-
-        print('get_arg_check', sig, mysig)
-
-        return mysig == sig
