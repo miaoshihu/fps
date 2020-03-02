@@ -11,7 +11,9 @@ from api.need.need_add import NeedSubmit
 from api.login import LoginHandler
 from api.upload import UploadHandler
 from api.test import Test
-from api.author import AuthorSubmit, AuthorGet
+from api.author.author_add import AuthorSubmit
+from api.author.author_get import AuthorGet
+
 
 app = tornado.web.Application([
     (r'/fps/login', LoginHandler),
