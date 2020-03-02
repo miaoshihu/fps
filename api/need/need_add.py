@@ -132,29 +132,3 @@ class NeedSubmit(tornado.web.RequestHandler):
         #     return None
 
         return Need(name, price, descs, address, phone, create_time, city_id, user_id, user_nickname)
-
-
-class NeedGetList(tornado.web.RequestHandler):
-
-    def set_default_headers(self):
-        self.set_header('Content-type', 'application/json')
-
-    def get(self):
-        print('NeedGetList *******************get****')
-        self._handle_request()
-
-    def post(self):
-        self._handle_request()
-
-    def _handle_request(self):
-        page = int(self.get_argument('page', "1")) - 1
-        step = 3
-        startIndex = page * step
-        dbHelper = MysqlHelper()
-        mysql = "select * from msapp_need limit " + str(startIndex) + "," + str(step)
-        print(mysql)
-        result = dbHelper.get_all(mysql)
-        print(result)
-        result = json_success("success need get list")
-        self.write(result)
-        self.finish()

@@ -7,7 +7,7 @@ from tornado.httpserver import HTTPServer
 from api.good.good_add import GoodSubmit
 from api.good.good_list import GoodGetList
 from api.good.good_get import GoodGet
-from api.need import NeedSubmit
+from api.need.need_add import NeedSubmit
 from api.login import LoginHandler
 from api.upload import UploadHandler
 from api.test import Test
