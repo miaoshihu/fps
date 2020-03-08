@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('app')
 
 
-class AuthorSubmit(tornado.web.RequestHandler):
+class AuthorRegister(tornado.web.RequestHandler):
 
     def set_default_headers(self):
         self.set_header('Content-type', 'application/json')

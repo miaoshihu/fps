@@ -11,8 +11,8 @@ from api.need.need_add import NeedSubmit
 from api.openid import GetOpenidHandler
 from api.upload import UploadHandler
 from api.test import Test
-from api.author.author_add import AuthorSubmit
-from api.author.author_get import AuthorGet
+from api.author.author_register import AuthorRegister
+from api.author.author_login import AuthorLogin
 
 
 app = tornado.web.Application([
@@ -25,8 +25,8 @@ app = tornado.web.Application([
     (r'/fps/need/submit', NeedSubmit),
     (r'/fps/test', Test),
 
-    (r'/fps/author/submit', AuthorSubmit),
-    (r'/fps/author/get', AuthorGet),
+    (r'/fps/author/register', AuthorRegister),
+    (r'/fps/author/login', AuthorLogin),
 
 ])
 
