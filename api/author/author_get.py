@@ -9,6 +9,7 @@ from mysql_helper import MysqlHelper
 from bean.data import Author
 from utils.response import json_error
 from utils.response import json_success
+from api.utils.utils import getToken
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -43,6 +44,7 @@ class AuthorGet(tornado.web.RequestHandler):
 
         self.logs("_handle_request")
         id = self.get_argument('id', "-1")
+
         print("AuthorGet ", id)
 
         r = redis.Redis(host='localhost', port=6379, db=0)
@@ -69,6 +71,7 @@ class AuthorGet(tornado.web.RequestHandler):
             'town': author.get(b'town').decode(),
             'address': author.get(b'address').decode(),
             'phone': author.get(b'phone').decode(),
+            'token': getToken(id),
         }
 
         result = {

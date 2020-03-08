@@ -9,6 +9,15 @@ import time
 from config import settings
 
 
+def getToken(id):
+    time_stamp = time.time()
+    text = str(time_stamp) + "&" + str(id)
+    print("getToken", text)
+    md5hash = hashlib.md5(text.encode('utf-8'))
+    md5 = md5hash.hexdigest()
+    return md5
+
+
 def getSig(time_stamp):
     text = str(time_stamp) + "&" + settings.get('url_secret')
     md5hash = hashlib.md5(text.encode('utf-8'))
