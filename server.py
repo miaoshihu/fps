@@ -8,7 +8,7 @@ from api.good.good_add import GoodSubmit
 from api.good.good_list import GoodGetList
 from api.good.good_get import GoodGet
 from api.need.need_add import NeedSubmit
-from api.login import LoginHandler
+from api.openid import GetOpenidHandler
 from api.upload import UploadHandler
 from api.test import Test
 from api.author.author_add import AuthorSubmit
@@ -16,7 +16,7 @@ from api.author.author_get import AuthorGet
 
 
 app = tornado.web.Application([
-    (r'/fps/login', LoginHandler),
+    (r'/fps/getopenid', GetOpenidHandler),
     (r'/upload', UploadHandler),
     (r'/fps/good/submit', GoodSubmit),
     (r'/fps/good/getlist', GoodGetList),
