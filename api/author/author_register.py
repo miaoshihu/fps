@@ -56,7 +56,7 @@ class AuthorRegister(tornado.web.RequestHandler):
             self.finish()
             return
 
-        # step3: 储存用户到数据库
+        # step3: 储存用户到数据库，直接为审核通过状态
         result = self.insert_author(dbHelper, author_info)
 
         if not result:
@@ -64,6 +64,8 @@ class AuthorRegister(tornado.web.RequestHandler):
             self.write(result)
             self.finish()
             return
+
+        # step4: 写到redis
 
         result = json_success("success")
         self.write(result)
@@ -89,11 +91,12 @@ class AuthorRegister(tornado.web.RequestHandler):
         sql = "insert into msapp_author(" \
               "id,nickname,point,status,descs,town,address,phone,create_time,time_stamp) values " \
               "('{}','{}',{},{},'{}', '{}','{}','{}','{}',{})".\
-            format(info.id, info.nickname, 0, 0, '', info.town, info.address, info.phone, info.create_time, info.time_stamp)
+            format(info.id, info.nickname, 0, 1, '', info.town, info.address, info.phone, info.create_time, info.time_stamp)
         self.logs("------------------")
         self.logs(sql)
 
         result2 = dbHelper.insert(sql)
+        self.logs(result2)
         return result2
 
     def get_author_info(self):

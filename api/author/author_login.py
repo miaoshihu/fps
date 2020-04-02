@@ -10,6 +10,7 @@ from bean.data import Author
 from utils.response import json_error
 from utils.response import json_success
 from api.utils.utils import getToken
+from api.utils.utils import getTime
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -54,7 +55,7 @@ class AuthorLogin(tornado.web.RequestHandler):
 
         if not author:
             self.logs("response_error_para error!")
-            result = json_error(Code.ERROR_PARA, Code.ERROR_PARA_DESC)
+            result = json_error(Code.ERROR_AUTHOR_ID, Code.ERROR_AUTHOR_ID_DESC)
             self.write(result)
             self.finish()
             return
@@ -62,6 +63,8 @@ class AuthorLogin(tornado.web.RequestHandler):
         print("-----------1----")
         print(author)
         print("-----------2----")
+
+        # 检查token是否过期，如果过期，生成新的token。如果没过期，延长time，不返回token
 
         data = {
             'id': author.get(b'id').decode(),
@@ -71,8 +74,9 @@ class AuthorLogin(tornado.web.RequestHandler):
             'town': author.get(b'town').decode(),
             'address': author.get(b'address').decode(),
             'phone': author.get(b'phone').decode(),
-            'token': getToken(id),
+            'time': getTime()
         }
+
 
         result = {
             'code': 0,
@@ -82,3 +86,4 @@ class AuthorLogin(tornado.web.RequestHandler):
 
         self.write(result)
         self.finish()
+

@@ -9,6 +9,11 @@ import time
 from config import settings
 
 
+def getTime():
+    time_stamp = time.time()
+    return time_stamp
+
+
 def getToken(id):
     time_stamp = time.time()
     text = str(time_stamp) + "&" + str(id)
