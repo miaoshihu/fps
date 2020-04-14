@@ -10,15 +10,17 @@ import redis
 
 
 def publish_good(good, is_publish):
+
+    print("publish_good", "is_publish = ", str(is_publish))
     # 出售信息 key: g_12 => good info map
     publish_good_map(good)
 
     # 城市出售列表 是否publish，是: 写入 key: cgl_hebeixianghe => good id list
     publish_good_cgl(good, is_publish)
 
-    # 个人出售 key: a_12 => good id list
-    publish_good_agl(good)
-    pass
+    if not is_publish:
+        # 个人出售 key: a_12 => good id list
+        publish_good_agl(good)
 
 
 def publish_good_map(good):
@@ -43,14 +45,13 @@ def publish_good_map(good):
     r.hset(key, "phone", str(good.phone))
     r.hset(key, "create_time", str(good.create_time))
     # r.hset(key, "time_stamp", str(good.time_stamp))
+
+    print("publish_good_map", "key =", key)
     pass
 
 
 # city good list
 def publish_good_cgl(good, is_publish):
-    if not is_publish:
-        print("publish_good_cgl", "is_publish =", str(is_publish), " return")
-        return
 
     r = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -58,11 +59,10 @@ def publish_good_cgl(good, is_publish):
 
     if good.status == 1:
         r.lrem(key, str(good.id))
+        print("publish_good_cgl", "is_publish =", str(is_publish), "remove", str(good.id))
     else:
         r.lpush(key, str(good.id))
-
-    print("publish_good_cgl", key, str(good.id))
-    pass
+        print("publish_good_cgl", "is_publish =", str(is_publish), "add", str(good.id))
 
 
 # author good list
@@ -76,7 +76,7 @@ def publish_good_agl(good):
 
     r.lpush(key, str(good.id))
 
-    print("publish_good_agl", key, str(good.id))
+    print("publish_good_agl", "key =", key, "value =", str(good.id))
 
 
 def publish_author(author):
@@ -93,4 +93,21 @@ def publish_author(author):
     r.hset(key, "phone", str(author.phone))
     r.hset(key, "town", str(author.town))
     r.hset(key, "status", str(author.status))
+
+    print("publish_author", "key =", key, "value =", r.hgetall(key))
+
+    return key
+
+
+def publish_city(city):
+    r = redis.Redis(host='localhost', port=6379, db=0)
+    key = "c_" + str(city.id)
+
+    # 城市分信息
+    r.hset(key, "id", str(city.id))
+    r.hset(key, "name", str(city.name))
+    r.hset(key, "enabled", str(city.enabled))
+
+    print("publish_city", "key =", key, "value =", r.hgetall(key))
+
     return key
