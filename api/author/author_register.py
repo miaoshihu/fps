@@ -11,6 +11,7 @@ from utils.response import json_error
 from utils.response import json_success
 from utils.response import json_success_data
 from api.utils.utils import getTime
+from api.utils.redis_api import publish_author
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -71,9 +72,8 @@ class AuthorRegister(tornado.web.RequestHandler):
 
         # step4: 写到redis
         author.id = self.get_db_author(dbHelper, author.openid)
-        self.logs("@@@@@@@@@@@@@@@@@@@@ " + str(author.id))
 
-        self.handlePublishAuthor(author)
+        publish_author(author)
 
         data = {
             'id': author.id,
@@ -164,25 +164,4 @@ class AuthorRegister(tornado.web.RequestHandler):
 
         return Author(openid, nickname, town, address, phone, create_time, time_stamp)
 
-    def handlePublishAuthor(self, author):
-
-        r = redis.Redis(host='localhost', port=6379, db=0)
-
-        mykey = "a_" + str(author.id)
-
-        # 作者信息
-        r.hset(mykey, "id", str(author.id))
-        r.hset(mykey, "openid", str(author.openid))
-        r.hset(mykey, "nickname", str(author.nickname))
-        r.hset(mykey, "town", str(author.town))
-        r.hset(mykey, "address", str(author.address))
-        r.hset(mykey, "point", str(author.point))
-        r.hset(mykey, "phone", str(author.phone))
-        r.hset(mykey, "town", str(author.town))
-        r.hset(mykey, "status", str(author.status))
-
-        print("-----------1-a---")
-        print(r.hgetall(mykey))
-        print("-----------2----")
-        return mykey
 
