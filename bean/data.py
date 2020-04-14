@@ -132,9 +132,8 @@ class Author:
         | time_stamp  | bigint(20)  | YES  |     | NULL    |       |
         +-------------+-------------+------+-----+---------+-------+
     '''
-
-    def __init__(self, id, nickname, town, address, phone, create_time, time_stamp):
-        self.id = id
+    def __init__(self, openid, nickname, town, address, phone, create_time, time_stamp):
+        self.openid = openid
         self.nickname = nickname
         self.town = town
         self.address = address

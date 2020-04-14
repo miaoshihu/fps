@@ -9,6 +9,8 @@ from mysql_helper import MysqlHelper
 from bean.data import Author
 from utils.response import json_error
 from utils.response import json_success
+from utils.response import json_success_data
+from api.utils.utils import getTime
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -46,10 +48,12 @@ class AuthorRegister(tornado.web.RequestHandler):
         dbHelper = MysqlHelper()
 
         # step1: 获取参数值
-        author_info = self.get_author_info()
+        author = self.get_author_info()
+        author.point = 0
+        author.status = 1
 
         # step2: 参数不合法，返回错误
-        if not author_info:
+        if not author:
             self.logs("response_error_para error!")
             result = json_error(Code.ERROR_PARA, Code.ERROR_PARA_DESC)
             self.write(result)
@@ -57,7 +61,7 @@ class AuthorRegister(tornado.web.RequestHandler):
             return
 
         # step3: 储存用户到数据库，直接为审核通过状态
-        result = self.insert_author(dbHelper, author_info)
+        result = self.insert_author(dbHelper, author)
 
         if not result:
             result = json_error(Code.ERROR_GODD_INSERT, Code.ERROR_PARA_DESC)
@@ -66,8 +70,23 @@ class AuthorRegister(tornado.web.RequestHandler):
             return
 
         # step4: 写到redis
+        author.id = self.get_db_author(dbHelper, author.openid)
+        self.logs("@@@@@@@@@@@@@@@@@@@@ " + str(author.id))
 
-        result = json_success("success")
+        self.handlePublishAuthor(author)
+
+        data = {
+            'id': author.id,
+            'nickname': author.nickname,
+            'point': author.point,
+            'status': author.status,
+            'town': author.town,
+            'address': author.address,
+            'phone': author.phone,
+            'time': getTime()
+        }
+
+        result = json_success_data("success", data)
         self.write(result)
         self.finish()
 
@@ -89,9 +108,9 @@ class AuthorRegister(tornado.web.RequestHandler):
             +-------------+-------------+------+-----+---------+-------+
         """
         sql = "insert into msapp_author(" \
-              "id,nickname,point,status,descs,town,address,phone,create_time,time_stamp) values " \
+              "openid,nickname,point,status,descs,town,address,phone,create_time,time_stamp) values " \
               "('{}','{}',{},{},'{}', '{}','{}','{}','{}',{})".\
-            format(info.id, info.nickname, 0, 1, '', info.town, info.address, info.phone, info.create_time, info.time_stamp)
+            format(info.openid, info.nickname, 0, 1, '', info.town, info.address, info.phone, info.create_time, info.time_stamp)
         self.logs("------------------")
         self.logs(sql)
 
@@ -99,10 +118,35 @@ class AuthorRegister(tornado.web.RequestHandler):
         self.logs(result2)
         return result2
 
+    def get_db_author(self, dbHelper, openid):
+        """
+            +-------------+-------------+------+-----+---------+-------+
+            | Field       | Type        | Null | Key | Default | Extra |
+            +-------------+-------------+------+-----+---------+-------+
+            | id          | varchar(50) | NO   | PRI | NULL    |       |
+            | nickname    | varchar(20) | NO   |     | NULL    |       |
+            | point       | int(11)     | NO   |     | NULL    |       |
+            | status      | int(11)     | NO   |     | NULL    |       |
+            | descs       | longtext    | YES  |     | NULL    |       |
+            | town        | varchar(20) | YES  |     | NULL    |       |
+            | address     | varchar(20) | YES  |     | NULL    |       |
+            | phone       | varchar(20) | NO   |     | NULL    |       |
+            | create_time | datetime(6) | YES  |     | NULL    |       |
+            | time_stamp  | bigint(20)  | YES  |     | NULL    |       |
+            +-------------+-------------+------+-----+---------+-------+
+        """
+        sql = "select id from msapp_author where openid ='{}' limit 1".format(openid)
+        self.logs("------------------")
+        self.logs(sql)
+
+        result2 = dbHelper.get_one(sql)
+        self.logs(result2)
+        return result2[0]
+
     def get_author_info(self):
         self.logs("get_author_info--------------------------")
 
-        id = self.get_argument('user_id', None)
+        openid = self.get_argument('openid', None)
         nickname = self.get_argument('user_nickname', None)
         town = self.get_argument('town', None)
         address = self.get_argument('address', None)
@@ -111,7 +155,6 @@ class AuthorRegister(tornado.web.RequestHandler):
         create_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         time_stamp = (int)(time.time())
 
-        self.logs(id)
         self.logs(nickname)
         self.logs(town)
         self.logs(address)
@@ -119,4 +162,27 @@ class AuthorRegister(tornado.web.RequestHandler):
         self.logs(create_time)
         self.logs(time_stamp)
 
-        return Author(id, nickname, town, address, phone, create_time, time_stamp)
+        return Author(openid, nickname, town, address, phone, create_time, time_stamp)
+
+    def handlePublishAuthor(self, author):
+
+        r = redis.Redis(host='localhost', port=6379, db=0)
+
+        mykey = "a_" + str(author.id)
+
+        # 作者信息
+        r.hset(mykey, "id", str(author.id))
+        r.hset(mykey, "openid", str(author.openid))
+        r.hset(mykey, "nickname", str(author.nickname))
+        r.hset(mykey, "town", str(author.town))
+        r.hset(mykey, "address", str(author.address))
+        r.hset(mykey, "point", str(author.point))
+        r.hset(mykey, "phone", str(author.phone))
+        r.hset(mykey, "town", str(author.town))
+        r.hset(mykey, "status", str(author.status))
+
+        print("-----------1-a---")
+        print(r.hgetall(mykey))
+        print("-----------2----")
+        return mykey
+

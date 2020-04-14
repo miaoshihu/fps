@@ -25,3 +25,13 @@ def json_success(text):
     })
 
     return content
+
+
+def json_success_data(text, data):
+    content = json.dumps({
+        'code': 0,
+        'desc': text,
+        'data': data,
+    })
+
+    return content

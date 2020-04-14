@@ -31,11 +31,12 @@ class GoodGet(tornado.web.RequestHandler):
 
     def _handle_request(self):
         id = int(self.get_argument('id', "1"))
+        city = self.get_argument('city', None)
         print("GoodGet ", id)
 
         r = redis.Redis(host='localhost', port=6379, db=0)
 
-        mykey = "cg_hb.xianghe_" + str(id)
+        mykey = "cg_" + city + "_" + str(id)
 
         print(r.hgetall(mykey))
 

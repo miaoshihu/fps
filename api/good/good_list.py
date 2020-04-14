@@ -31,6 +31,7 @@ class GoodGetList(tornado.web.RequestHandler):
 
     def _handle_request(self):
         page = int(self.get_argument('page', "1")) - 1
+        city = self.get_argument('city', None)
 
         paraCheck = check_args(self)
 
@@ -50,7 +51,7 @@ class GoodGetList(tornado.web.RequestHandler):
 
         print("GoodGetList ", page)
 
-        listkey = "cgl_hb.xianghe"
+        listkey = "cgl_" + city
 
         data = []
 
@@ -65,6 +66,7 @@ class GoodGetList(tornado.web.RequestHandler):
         total = (length + step - 1) / step
 
         if start >= length:
+            print("GoodGetList ", "start = ", start, " end = ", end, "total = ", total, "length = ", length)
             result = {
                 'code': -1,
                 'desc': "reach max",
